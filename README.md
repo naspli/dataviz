@@ -7,4 +7,8 @@ Coronavirus (COVID-19) in the UK: Actual Deaths vs Maximum Possible Deaths vs Re
 * process.py: functions to process and plot the data
 
 ## 2. popmap
-Binary World Population Map
+Binary World Population Map (incomplete)
+
+## 3. soccer-spi
+Top 5 Leagues' Club Strength Distribution according to 538's SPI Rankings
+
