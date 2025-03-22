@@ -33,7 +33,7 @@ border_args = dict(showline=True, linewidth=1, linecolor="rgb(42,63,95)")
 fig.update_yaxes(title_text="<b>SPI</b>", **border_args)
 fig.update_xaxes(title_text="")
 fig.add_annotation(
-    text="Data visualisation by github.com/Meta95",
+    text="Data visualisation by github.com/naspli",
     font={"size": 8, "color": "rgb(42,63,95)"},
     x=1.08,
     y=-0.16,
@@ -43,5 +43,8 @@ fig.add_annotation(
     yref="paper"
 )
 
+# import chart_studio.plotly as py
+# py.plot(fig, filename='club-strength', auto_open=True)
+
 fig.write_html("output-20230101/club-strength.html")
-# fig.show()
+fig.show()
