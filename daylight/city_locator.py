@@ -3,16 +3,17 @@ from geopy.geocoders import Nominatim
 from timezonefinder import TimezoneFinder
 
 
-def get_city_info(city_name: str):
-    # Initialize the geocoder with a unique user agent
-    geolocator = Nominatim(user_agent="city_locator")
-    location = geolocator.geocode(city_name)
-    if location is None:
-        raise ValueError(f"Could not find city: {city_name}")
+def get_city_info(city_name, coords=None):
+    if coords is None:
+        # Initialize the geocoder with a unique user agent
+        geolocator = Nominatim(user_agent="city_locator")
+        location = geolocator.geocode(city_name)
+        if location is None:
+            raise ValueError(f"Could not find city: {city_name}")
 
-    # Retrieve latitude and longitude
-    lat = location.latitude
-    lon = location.longitude
+        lat, lon = location.latitude, location.longitude
+    else:
+        lat, lon = coords
 
     # Find the timezone using the coordinates
     tf = TimezoneFinder()

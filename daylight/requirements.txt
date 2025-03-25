@@ -1,0 +1,6 @@
+geopy==2.4.1
+matplotlib==3.8.4
+numpy==2.2.4
+pysolar==0.13
+pytz==2024.1
+timezonefinder==6.5.9

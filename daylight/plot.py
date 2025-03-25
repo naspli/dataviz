@@ -12,20 +12,22 @@ from pysolar.solar import get_altitude
 
 from city_locator import get_city_info
 
+VERSION = "2"
 THIS_YEAR = int(datetime.now().strftime("%Y"))
 
 # City parameters
 parser = argparse.ArgumentParser(description='Plot daylight data for a city')
 parser.add_argument('city_name', help='e.g. London')
+parser.add_argument("--coords", default=None, type=float, nargs=2, help="coordinates override")
 parser.add_argument('--year', type=int, default=THIS_YEAR, help='default this year')
 args = parser.parse_args()
 city_name = args.city_name
 year = args.year
 
-latitude, longitude, local_timezone = get_city_info(city_name)
+latitude, longitude, local_timezone = get_city_info(city_name, coords=args.coords)
 
 # Define the year and resolution of the grid
-num_days = 365
+num_days = datetime(year, 12, 31).timetuple().tm_yday
 time_interval_minutes = 10  # sampling every 10 minutes
 num_time_steps = (24 * 60) // time_interval_minutes
 
@@ -55,9 +57,11 @@ color_map_day = mcolors.LinearSegmentedColormap.from_list(
     [(0, mpl.colormaps['plasma'](1.0)), (1, "#FFFFFF")]
 )
 color_map = mcolors.ListedColormap(np.concatenate([
-    color_map_night(np.linspace(0, 1, 75)),
-    mpl.colormaps['plasma'](np.linspace(0, 1, 30)),
-    color_map_day(np.linspace(0, 1, 75))
+    color_map_night(np.linspace(0, 0.99, 72)),
+    mpl.colormaps['plasma'](np.linspace(0, 0.5, 17)),
+    mpl.colormaps['plasma'](np.linspace(0.55, 0.6, 2)),
+    mpl.colormaps['plasma'](np.linspace(0.65, 1, 11)),
+    color_map_day(np.linspace(0.01, 1, 78))
 ]))
 
 # Generate month start positions and month names using the calendar module
@@ -91,11 +95,11 @@ ax.set_yticklabels(month_names)
 ax.grid(visible=True, axis='x', linewidth=1, alpha=0.5, dashes=(5, 5))
 ax.set_title(f'{city_name} ({year})', weight='bold', fontsize=10)
 
-plt.suptitle("Daylight Hours and the Sun's Intensity", weight='bold', fontsize=12, fontstyle='italic')
+plt.suptitle("Daylight Hours and the Sun's Height", weight='bold', fontsize=12, fontstyle='italic')
 
-fig.text(0.002, 0.002, "@naspli", ha='left', va="bottom", fontsize=8)
+fig.text(0.002, 0.002, f"@naspli\ndataviz/daylight/v{VERSION}", ha='left', va="bottom", fontsize=8)
 
 plt.tight_layout()
 
 Path("output").mkdir(exist_ok=True)
-plt.savefig(f"output/daylight_{city_name.replace(' ', '')}_{year}.png")
+plt.savefig(f"output/daylight_{city_name.replace(' ', '')}_{year}.v{VERSION}.png")
